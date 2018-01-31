@@ -12,7 +12,7 @@ public class L10n {
      * filled with the given values.
      */
     public static String localize(Localizable localizable, LocalizableValues values) {
-        return values.fillIn(localize(localizable));
+        return values.insertInto(localize(localizable));
     }
 
     /**

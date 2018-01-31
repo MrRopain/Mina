@@ -44,9 +44,9 @@ public class LocalizableValues {
     }
 
     /**
-     * Fills values into the given string by replacing identifiers.
+     * Inserts values into the given string by replacing identifiers.
      */
-    String fillIn(String string) {
+    String insertInto(String string) {
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             string = string.replace(VALUE_IDENTIFIER + entry.getKey(), entry.getValue().toString());
         }
