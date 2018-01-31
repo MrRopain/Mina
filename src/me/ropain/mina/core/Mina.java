@@ -21,7 +21,10 @@ public class Mina {
     private static final String LOCALE_DIR = "locales";
     private static final String LOCALE_DEFAULT = "english";
 
-    private static final String[] PACKAGES_DEFAULT = new String[] { "mina-protect" };
+    private static final String[] PACKAGES_DEFAULT = new String[] {
+            "mina-essentials",
+            "mina-protect"
+    };
 
     private static Mina instance;
 

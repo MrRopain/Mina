@@ -1,4 +1,4 @@
-package me.ropain.mina.protect;
+package me.ropain.mina.packages.protect;
 
 import me.ropain.mina.core.packages.IPackage;
 

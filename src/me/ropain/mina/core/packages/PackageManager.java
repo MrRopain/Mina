@@ -4,7 +4,8 @@ import me.ropain.mina.core.l10n.Localizable;
 import me.ropain.mina.core.l10n.LocalizableValues;
 import me.ropain.mina.core.logging.Logger;
 import me.ropain.mina.core.logging.LoggingLevel;
-import me.ropain.mina.protect.MinaProtect;
+import me.ropain.mina.packages.essentials.MinaEssentials;
+import me.ropain.mina.packages.protect.MinaProtect;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PackageManager {
     private static boolean loaded;
 
     static {
+        packages.put("mina-essentials", MinaEssentials.class);
         packages.put("mina-protect", MinaProtect.class);
     }
 
@@ -59,8 +61,7 @@ public class PackageManager {
 
         try {
             Logger.log(LoggingLevel.INFO, LOAD_PACKAGE, LocalizableValues.build("package", packageName));
-
-
+            packages.get(packageName).newInstance().load();
         }
         catch (Exception e) {}
     }
