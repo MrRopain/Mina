@@ -1,11 +1,13 @@
 package me.ropain.mina.core.packages;
 
+import me.ropain.mina.core.Mina;
 import me.ropain.mina.core.l10n.Localizable;
 import me.ropain.mina.core.l10n.LocalizableValues;
 import me.ropain.mina.core.logging.Logger;
 import me.ropain.mina.core.logging.LoggingLevel;
 import me.ropain.mina.packages.essentials.MinaEssentials;
 import me.ropain.mina.packages.protect.MinaProtect;
+import org.spongepowered.api.Sponge;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +19,8 @@ import java.util.List;
  */
 public class PackageManager {
 
-    private static final Localizable LOAD_PACKAGE = Localizable.get("load-package");
-    private static final Localizable LOAD_PACKAGE_INVALID = Localizable.get("load-package-invalid");
+    private static final Localizable LOADING = Localizable.get("packaging/loading");
+    private static final Localizable INVALID = Localizable.get("packaging/invalid");
 
     private static HashMap<String, Class<? extends IPackage>> packages = new HashMap<>();
     private static boolean loaded;
@@ -55,13 +57,19 @@ public class PackageManager {
     private static void loadPackage(String packageName) {
 
         if (!packages.containsKey(packageName)) {
-            Logger.log(LoggingLevel.WARN, LOAD_PACKAGE_INVALID, LocalizableValues.build("package", packageName));
+            Logger.log(LoggingLevel.WARN, INVALID, LocalizableValues.build("package", packageName));
             return;
         }
 
         try {
-            Logger.log(LoggingLevel.INFO, LOAD_PACKAGE, LocalizableValues.build("package", packageName));
-            packages.get(packageName).newInstance().load();
+            Logger.log(LoggingLevel.INFO, LOADING, LocalizableValues.build("package", packageName));
+            IPackage pack = packages.get(packageName).newInstance();
+
+            for (Object obj : pack.getListeners()) {
+                Sponge.getEventManager().registerListeners(Mina.getInstance(), obj);
+            }
+
+            pack.load();
         }
         catch (Exception e) {}
     }

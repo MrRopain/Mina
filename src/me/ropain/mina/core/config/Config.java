@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Config {
 
-    private static final String PATH_SEPARATOR = ".";
+    private static final String PATH_SEPARATOR = "/";
 
     private static HoconConfigurationLoader loader;
 
@@ -57,11 +57,8 @@ public class Config {
         return null;
     }
 
-    /**
-     * Returns a list of strings from the given path.
-     */
-    public static List<String> getList(String path) {
-        return getList(path, null);
+    public static int getInt(String path, int def) {
+        return root.getNode(resolvePath(path)).getInt(def);
     }
 
     /**
@@ -72,16 +69,16 @@ public class Config {
     }
 
     /**
-     * Returns a string from the given path.
+     * @see ConfigurationNode#getNode
      */
-    public static String getString(String path) {
-        return getString(path, null);
+    public static ConfigurationNode getNode(Object... objects) {
+        return root.getNode(objects);
     }
 
     /**
      * Returns an array of objects representing the path to a node.
      */
-    private static Object[] resolvePath(String path) {
-        return path.contains(PATH_SEPARATOR) ? path.split(PATH_SEPARATOR) : new Object[] { path };
+    public static Object[] resolvePath(String path) {
+        return path.split(PATH_SEPARATOR);
     }
 }

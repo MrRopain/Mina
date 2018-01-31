@@ -3,14 +3,17 @@ package me.ropain.mina.core;
 import com.google.inject.Inject;
 import me.ropain.mina.core.config.Config;
 import me.ropain.mina.core.l10n.Localizable;
+import me.ropain.mina.core.logging.LoggingLevel;
 import me.ropain.mina.core.packages.PackageManager;
 import org.slf4j.Logger;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -27,6 +30,9 @@ public class Mina {
     };
 
     private static Mina instance;
+
+    @Inject
+    private PluginContainer container;
 
     @Inject
     private Logger logger;
@@ -67,6 +73,14 @@ public class Mina {
         }
 
         return path;
+    }
+
+    public static Mina getInstance() {
+        return instance;
+    }
+
+    public static PluginContainer getContainer() {
+        return instance.container;
     }
 
     public static Logger getLogger() {

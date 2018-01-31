@@ -15,7 +15,7 @@ public class MinaProtect implements IPackage {
     }
 
     @Override
-    public Object[] listeners() {
+    public Object[] getListeners() {
         return new Object[0];
     }
 }

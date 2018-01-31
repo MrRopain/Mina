@@ -21,4 +21,19 @@ public class L10n {
     public static String localize(Localizable localizable) {
         return localizable.string == null ? localizable.id : localizable.string;
     }
+
+    /**
+     * Returns the string corresponding to the @see Localizable specified by localizableId.
+     * Values are filled in.
+     */
+    public static String localize(String localizableId, LocalizableValues values) {
+        return localize(Localizable.get(localizableId), values);
+    }
+
+    /**
+     * Returns the string corresponding to the @see Localizable specified by localizableId.
+     */
+    public static String localize(String localizableId) {
+        return localize(Localizable.get(localizableId));
+    }
 }

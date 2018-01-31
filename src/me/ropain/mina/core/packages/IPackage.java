@@ -20,5 +20,5 @@ public interface IPackage {
     /**
      * Returns an array of event listeners to be registered by Mina.
      */
-    Object[] listeners();
+    Object[] getListeners();
 }

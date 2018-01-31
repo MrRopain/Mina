@@ -1,5 +1,6 @@
 package me.ropain.mina.core.l10n;
 
+import me.ropain.mina.core.config.Config;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
@@ -63,7 +64,7 @@ public class Localizable {
             return null;
         }
 
-        return new Localizable(id, localeNode.getNode(id).getString(fallbackString));
+        return new Localizable(id, localeNode.getNode(Config.resolvePath(id)).getString(fallbackString));
     }
 
     /**
