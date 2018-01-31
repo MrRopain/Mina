@@ -19,8 +19,6 @@ public class L10n {
      * Returns the string corresponding to the @see Localizable.
      */
     public static String localize(Localizable localizable) {
-
-        // todo implement
-        return localizable.getDefaultString();
+        return localizable.string == null ? localizable.id : localizable.string;
     }
 }
