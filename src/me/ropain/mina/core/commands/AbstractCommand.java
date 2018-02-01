@@ -30,11 +30,11 @@ public abstract class AbstractCommand implements CommandExecutor {
     protected CommandSpec.Builder command = CommandSpec.builder();
     protected String[] aliases;
 
-    protected AbstractCommand(String root) {
-        this.root = root;
+    protected AbstractCommand(String name) {
+        root = "commands/" + name;
 
         command
-                .description(Text.of(L10n.localize(Config.makePath(root, "description"))))
+                .description(Text.of(L10n.localize(Config.makePath(name, "description"))))
                 .executor(this);
     }
 
