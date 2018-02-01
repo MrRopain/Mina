@@ -2,6 +2,7 @@ package me.ropain.mina.packages.essentials.commands;
 
 import me.ropain.mina.core.commands.AbstractCommand;
 import me.ropain.mina.core.l10n.LocalizableValues;
+import me.ropain.mina.packages.essentials.teleport.Teleporter;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -33,6 +34,7 @@ public class CommandTeleport extends AbstractCommand {
     }
 
     private void teleportToPlayer(Player player, Player target) {
+        Teleporter.teleport(player, target);
         displayResponse(player, ChatTypes.ACTION_BAR, "success", LocalizableValues.builder()
                 .add("player", target.getName())
                 .build());

@@ -1,6 +1,7 @@
 package me.ropain.mina.packages.essentials.commands;
 
 import me.ropain.mina.core.commands.AbstractCommand;
+import me.ropain.mina.core.l10n.LocalizableValues;
 import me.ropain.mina.packages.essentials.teleport.Teleporter;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -38,12 +39,17 @@ public class CommandTeleportWorld extends AbstractCommand {
 
     private void teleportToWorld(Player player, String worldName) {
         Optional<World> world = Sponge.getServer().getWorld(worldName);
-        if (world.isPresent()) {
-            displayResponse(player, ChatTypes.ACTION_BAR, "world_not_present");
+
+        if (!world.isPresent()) {
+            displayResponse(player, ChatTypes.ACTION_BAR, "world_not_present", LocalizableValues.builder()
+                    .add("world", worldName.toUpperCase())
+                    .build());
+            return;
         }
-        else {
-            Teleporter.teleport(player, world.get());
-            displayResponse(player, ChatTypes.ACTION_BAR, "success");
-        }
+
+        Teleporter.teleport(player, world.get());
+        displayResponse(player, ChatTypes.ACTION_BAR, "success", LocalizableValues.builder()
+                .add("world", worldName.toUpperCase())
+                .build());
     }
 }

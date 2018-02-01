@@ -36,8 +36,6 @@ public class Teleporter {
     public static void teleport(Player player, Player target) {
         updateLastLocation(player);
         player.setLocation(target.getLocation());
-        player.setVehicle(target);
-        target.addPassenger(player);
     }
 
     /**
@@ -65,7 +63,7 @@ public class Teleporter {
             return;
         }
 
-        player.setLocation(lastLocations.get(player));
+        teleport(player, lastLocations.get(player));
     }
 
     /**
