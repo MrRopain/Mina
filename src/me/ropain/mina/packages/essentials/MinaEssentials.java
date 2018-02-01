@@ -4,6 +4,7 @@ import me.ropain.mina.core.packages.IPackage;
 import me.ropain.mina.packages.essentials.commands.CommandBack;
 import me.ropain.mina.packages.essentials.commands.CommandTeleport;
 import me.ropain.mina.packages.essentials.commands.CommandTeleportLocation;
+import me.ropain.mina.packages.essentials.commands.CommandTeleportWorld;
 import me.ropain.mina.packages.essentials.teleport.Teleporter;
 
 public class MinaEssentials implements IPackage {
@@ -12,6 +13,7 @@ public class MinaEssentials implements IPackage {
     public void load() {
         new CommandTeleport().register();
         new CommandTeleportLocation().register();
+        new CommandTeleportWorld().register();
         new CommandBack().register();
     }
 
