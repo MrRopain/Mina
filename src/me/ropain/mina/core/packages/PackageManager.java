@@ -57,12 +57,16 @@ public class PackageManager {
     private static void loadPackage(String packageName) {
 
         if (!packages.containsKey(packageName)) {
-            Logger.log(LoggingLevel.WARN, INVALID, LocalizableValues.build("package", packageName));
+            Logger.log(LoggingLevel.WARN, INVALID, LocalizableValues.builder()
+                    .add("package", packageName)
+                    .build());
             return;
         }
 
         try {
-            Logger.log(LoggingLevel.INFO, LOADING, LocalizableValues.build("package", packageName));
+            Logger.log(LoggingLevel.INFO, LOADING, LocalizableValues.builder()
+                    .add("package", packageName)
+                    .build());
             IPackage pack = packages.get(packageName).newInstance();
 
             for (Object obj : pack.getListeners()) {

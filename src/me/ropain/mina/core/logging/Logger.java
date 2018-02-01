@@ -36,6 +36,6 @@ public class Logger {
      * Logs a localized string on the given logging level.
      */
     public static void log(LoggingLevel level, Localizable localizable) {
-        log(level, localizable, LocalizableValues.build());
+        log(level, localizable);
     }
 }
