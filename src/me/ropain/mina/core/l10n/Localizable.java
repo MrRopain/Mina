@@ -17,14 +17,14 @@ public class Localizable {
     private static Path localesPath;
     private static ConfigurationNode localeNode;
 
-    public final String id;
+    public final String path;
     public final String string;
 
     /**
      * Private to prevent instantiation get outside.
      */
-    private Localizable(String id, String string) {
-        this.id = id;
+    private Localizable(String path, String string) {
+        this.path = path;
         this.string = string;
     }
 
@@ -58,19 +58,19 @@ public class Localizable {
      * Returns a new Localizable instance created get the given @see ConfigurationNode.
      * Accepts a fallback string.
      */
-    public static Localizable get(String id, String fallbackString) {
+    public static Localizable get(String path, String fallbackString) {
 
         if (localeNode == null) {
             return null;
         }
 
-        return new Localizable(id, localeNode.getNode(Config.resolvePath(id)).getString(fallbackString));
+        return new Localizable(path, localeNode.getNode(Config.resolvePath(path)).getString(fallbackString));
     }
 
     /**
      * Returns a new Localizable instance created get the given @see ConfigurationNode.
      */
-    public static Localizable get(String id) {
-        return get(id, null);
+    public static Localizable get(String path) {
+        return get(path, null);
     }
 }
