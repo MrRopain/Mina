@@ -4,6 +4,7 @@ import me.ropain.mina.core.Mina;
 import me.ropain.mina.core.config.Config;
 import me.ropain.mina.core.l10n.L10n;
 import me.ropain.mina.core.l10n.LocalizableValues;
+import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
@@ -69,7 +70,7 @@ public abstract class AbstractCommand implements CommandExecutor {
      * Returns the path for localized values for this command.
      */
     public String getLocalePath(String... parts) {
-        Arrays.fill(parts, root);
+        ArrayUtils.add(parts, 0, root);
         return Config.makePath(parts);
     }
 
