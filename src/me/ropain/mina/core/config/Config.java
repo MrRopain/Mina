@@ -45,7 +45,14 @@ public class Config {
     }
 
     /**
-     * Returns a list of strings from the given path. Accepts a fallback string.
+     * Returns an integer from the given path. Accepts a fallback value.
+     */
+    public static int getInt(String path, int def) {
+        return root.getNode(resolvePath(path)).getInt(def);
+    }
+
+    /**
+     * Returns a list of strings from the given path. Accepts a fallback value.
      */
     public static List<String> getList(String path, String[] def) {
         ConfigurationNode node = root.getNode(resolvePath(path));
@@ -57,12 +64,8 @@ public class Config {
         return null;
     }
 
-    public static int getInt(String path, int def) {
-        return root.getNode(resolvePath(path)).getInt(def);
-    }
-
     /**
-     * Returns a string from the given path. Accepts a fallback string.
+     * Returns a string from the given path. Accepts a fallback value.
      */
     public static String getString(String path, String def) {
         return root.getNode(resolvePath(path)).getString(def);
@@ -73,6 +76,23 @@ public class Config {
      */
     public static ConfigurationNode getNode(Object... objects) {
         return root.getNode(objects);
+    }
+
+    /**
+     * Returns a path made from the given paths.
+     */
+    public static String makePath(String... parts) {
+        String path = "";
+
+        for (int i = 0; i < parts.length; i++) {
+            path += parts[i];
+
+            if (i != parts.length - 1) {
+                path += PATH_SEPARATOR;
+            }
+        }
+
+        return path;
     }
 
     /**
