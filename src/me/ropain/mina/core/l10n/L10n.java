@@ -1,5 +1,9 @@
 package me.ropain.mina.core.l10n;
 
+import me.ropain.mina.core.commands.AbstractCommand;
+import me.ropain.mina.core.config.Config;
+import org.spongepowered.api.text.Text;
+
 /**
  * Contains functionality to localize strings.
  *
@@ -19,7 +23,7 @@ public class L10n {
      * Returns the string corresponding to the @see Localizable.
      */
     public static String localize(Localizable localizable) {
-        return localizable.string == null ? localizable.id : localizable.string;
+        return localizable.string == null ? localizable.path : localizable.string;
     }
 
     /**
@@ -35,5 +39,21 @@ public class L10n {
      */
     public static String localize(String localizableId) {
         return localize(Localizable.get(localizableId));
+    }
+
+    /**
+     * Returns a localized command response, filled with the given values.
+     */
+    public static Text localizeResponse(AbstractCommand command, String response, LocalizableValues values) {
+        String responsePath = Config.makePath(command.getLocalePath("responses", response));
+        return Text.of(localize(Localizable.get(responsePath), values));
+    }
+
+    /**
+     * Returns a localized command response.
+     */
+    public static Text localizeResponse(AbstractCommand command, String response) {
+        String responsePath = Config.makePath(command.getLocalePath("responses", response));
+        return Text.of(localize(Localizable.get(responsePath)));
     }
 }
