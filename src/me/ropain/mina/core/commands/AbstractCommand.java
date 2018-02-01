@@ -4,7 +4,6 @@ import me.ropain.mina.core.Mina;
 import me.ropain.mina.core.config.Config;
 import me.ropain.mina.core.l10n.L10n;
 import me.ropain.mina.core.l10n.LocalizableValues;
-import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.spec.CommandExecutor;
@@ -12,11 +11,10 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.chat.ChatType;
-import org.spongepowered.api.text.chat.ChatTypes;
-import org.spongepowered.api.text.format.TextColor;
-import org.spongepowered.api.text.format.TextColors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstract command executor to simplify command registration.
@@ -25,16 +23,19 @@ import java.util.Arrays;
  */
 public abstract class AbstractCommand implements CommandExecutor {
 
+    private static final String PATH_COMMANDS = "commands";
+    private static final String PATH_DESCRIPTION = "description";
+
     protected String root;
 
     protected CommandSpec.Builder command = CommandSpec.builder();
     protected String[] aliases;
 
-    protected AbstractCommand(String name) {
-        root = "commands/" + name;
+    protected AbstractCommand(String root) {
+        this.root = root;
 
         command
-                .description(Text.of(L10n.localize(Config.makePath(name, "description"))))
+                .description(Text.of(L10n.localize(Config.makePath(root, PATH_DESCRIPTION))))
                 .executor(this);
     }
 
@@ -70,8 +71,11 @@ public abstract class AbstractCommand implements CommandExecutor {
      * Returns the path for localized values for this command.
      */
     public String getLocalePath(String... parts) {
-        ArrayUtils.add(parts, 0, root);
-        return Config.makePath(parts);
+        List<String> fullParts = new ArrayList<>(Arrays.asList(parts));
+        fullParts.add(0, PATH_COMMANDS);
+        fullParts.add(1, root);
+
+        return Config.makePath(fullParts.toArray(new String[fullParts.size()]));
     }
 
     /**
