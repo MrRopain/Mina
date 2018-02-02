@@ -25,7 +25,9 @@ public class MinaEssentials implements IPackage {
         return new AbstractCommand[] {
                 new CommandBack(),
                 new CommandTeleport(),
+                new CommandTeleportAccept(),
                 new CommandTeleportLocation(),
+                new CommandTeleportRequest(),
                 new CommandTeleportWorld(),
                 new CommandVanish(),
         };
