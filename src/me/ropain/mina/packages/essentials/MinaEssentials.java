@@ -9,11 +9,6 @@ public class MinaEssentials implements IPackage {
 
     @Override
     public void load() {
-        new CommandBack().register();
-        new CommandTeleport().register();
-        new CommandTeleportLocation().register();
-        new CommandTeleportWorld().register();
-        new CommandVanish().register();
     }
 
     @Override
