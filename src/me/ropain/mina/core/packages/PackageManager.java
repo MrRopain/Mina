@@ -1,6 +1,7 @@
 package me.ropain.mina.core.packages;
 
 import me.ropain.mina.core.Mina;
+import me.ropain.mina.core.commands.AbstractCommand;
 import me.ropain.mina.core.l10n.Localizable;
 import me.ropain.mina.core.l10n.LocalizableValues;
 import me.ropain.mina.core.logging.Logger;
@@ -71,6 +72,10 @@ public class PackageManager {
 
             for (Object obj : pack.getListeners()) {
                 Sponge.getEventManager().registerListeners(Mina.getInstance(), obj);
+            }
+
+            for (AbstractCommand command : pack.getCommands()) {
+                command.register();
             }
 
             pack.load();

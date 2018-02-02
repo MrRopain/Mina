@@ -1,5 +1,7 @@
 package me.ropain.mina.core.packages;
 
+import me.ropain.mina.core.commands.AbstractCommand;
+
 /**
  * Contains functions to load and unload packages and automated event listener registration.
  *
@@ -21,4 +23,9 @@ public interface IPackage {
      * Returns an array of event listeners to be registered by Mina.
      */
     Object[] getListeners();
+
+    /**
+     * Returns an array of command executors to be registered by Mina.
+     */
+    AbstractCommand[] getCommands();
 }
