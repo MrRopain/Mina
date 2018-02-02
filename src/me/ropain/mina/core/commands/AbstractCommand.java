@@ -26,6 +26,8 @@ public abstract class AbstractCommand implements CommandExecutor {
     private static final String PATH_COMMANDS = "commands";
     private static final String PATH_DESCRIPTION = "description";
 
+    protected static final Text ARGUMENT_PLAYER = Text.of("player");
+
     protected String root;
 
     protected CommandSpec.Builder command = CommandSpec.builder();

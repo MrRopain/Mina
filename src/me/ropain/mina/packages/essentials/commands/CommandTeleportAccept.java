@@ -8,7 +8,6 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.chat.ChatTypes;
 
 public class CommandTeleportAccept extends AbstractCommand {
@@ -19,7 +18,7 @@ public class CommandTeleportAccept extends AbstractCommand {
         toAliases("tpa");
         command
                 .permission("mina.teleport.request")
-                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("from"))));
+                .arguments(GenericArguments.onlyOne(GenericArguments.player(ARGUMENT_PLAYER)));
     }
 
     @Override
@@ -29,7 +28,7 @@ public class CommandTeleportAccept extends AbstractCommand {
             return CommandResult.empty();
         }
 
-        args.<Player>getOne("from").ifPresent(from -> acceptRequest((Player) src, from));
+        args.<Player>getOne(ARGUMENT_PLAYER).ifPresent(from -> acceptRequest((Player) src, from));
         return CommandResult.success();
     }
 

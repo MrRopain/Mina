@@ -19,7 +19,7 @@ public class CommandTeleportRequest extends AbstractCommand {
         toAliases("tpr");
         command
                 .permission("mina.teleport.request")
-                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("to"))));
+                .arguments(GenericArguments.onlyOne(GenericArguments.player(ARGUMENT_PLAYER)));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CommandTeleportRequest extends AbstractCommand {
             return CommandResult.empty();
         }
 
-        args.<Player>getOne("to").ifPresent(to -> sendRequest((Player) src, to));
+        args.<Player>getOne(ARGUMENT_PLAYER).ifPresent(to -> sendRequest((Player) src, to));
         return CommandResult.success();
     }
 
