@@ -12,6 +12,9 @@ public class CommandVanish extends AbstractCommand {
 
     public CommandVanish() {
         super("vanish");
+
+        toAliases("vanish", "v");
+        command.permission("mina.teleport.vanish");
     }
 
     @Override
