@@ -3,7 +3,6 @@ package me.ropain.mina.packages.essentials.teleport;
 import me.ropain.mina.core.Mina;
 import me.ropain.mina.core.l10n.L10n;
 import me.ropain.mina.core.l10n.LocalizableValues;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
@@ -23,13 +22,15 @@ public class TeleportRequest {
     public static final TeleportRequest NONE = new TeleportRequest();
 
     private static final int REQUEST_TIMEOUT = 30;
-    private static final String PATH_RESPONSE_CANCEL_FROM = "other/teleport_cancel/player_from";
-    private static final String PATH_RESPONSE_CANCEL_TO = "other/teleport_cancel/player_to";
+    private static final String MESSAGE_CANCEL_FROM = "other/teleport_cancel/player_from";
+    private static final String MESSAGE_CANCEL_TO = "other/teleport_cancel/player_to";
 
     private static final List<TeleportRequest> requests = new ArrayList<>();
 
     public final Player from;
     public final Player to;
+
+    private boolean canTimeout = true;
 
     /**
      * Only used to instantiate the None type.
@@ -53,6 +54,7 @@ public class TeleportRequest {
     public void accept() {
         Teleporter.teleport(from, to);
         requests.remove(this);
+        canTimeout = false;
     }
 
     /**
@@ -60,12 +62,25 @@ public class TeleportRequest {
      */
     public void cancel() {
         requests.remove(this);
+        canTimeout = false;
+    }
 
-        from.sendMessage(ChatTypes.CHAT, Text.of(L10n.localize(PATH_RESPONSE_CANCEL_FROM, LocalizableValues.builder()
+    /**
+     * Cancels a request and shows the timeout message to both players.
+     */
+    public void timeout() {
+
+        if (!canTimeout) {
+            return;
+        }
+
+        cancel();
+
+        from.sendMessage(ChatTypes.CHAT, Text.of(L10n.localize(MESSAGE_CANCEL_TO, LocalizableValues.builder()
                 .add("player", to.getName())
                 .build())));
 
-        to.sendMessage(ChatTypes.CHAT, Text.of(L10n.localize(PATH_RESPONSE_CANCEL_TO, LocalizableValues.builder()
+        to.sendMessage(ChatTypes.CHAT, Text.of(L10n.localize(MESSAGE_CANCEL_FROM, LocalizableValues.builder()
                 .add("player", from.getName())
                 .build())));
     }
@@ -78,7 +93,7 @@ public class TeleportRequest {
 
         Task.builder()
                 .delay(REQUEST_TIMEOUT, TimeUnit.SECONDS)
-                .execute(() -> request.cancel())
+                .execute(() -> request.timeout())
                 .submit(Mina.getInstance());
 
         requests.add(request);
