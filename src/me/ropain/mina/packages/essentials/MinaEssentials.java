@@ -4,6 +4,10 @@ import me.ropain.mina.core.commands.AbstractCommand;
 import me.ropain.mina.core.packages.IPackage;
 import me.ropain.mina.packages.essentials.commands.*;
 import me.ropain.mina.packages.essentials.teleport.Teleporter;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.DestructEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 
 public class MinaEssentials implements IPackage {
 
@@ -17,7 +21,7 @@ public class MinaEssentials implements IPackage {
 
     @Override
     public Object[] getListeners() {
-        return new Object[] { Teleporter.getInstance() };
+        return new Object[] { this };
     }
 
     @Override
@@ -31,5 +35,10 @@ public class MinaEssentials implements IPackage {
                 new CommandTeleportWorld(),
                 new CommandVanish(),
         };
+    }
+
+    @Listener
+    public void onPlayerDeath(DestructEntityEvent.Death event, @Getter("getTargetEntity") Player player) {
+        Teleporter.updateLastLocation(player);
     }
 }

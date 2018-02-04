@@ -25,19 +25,6 @@ public class Teleporter {
      */
     private Teleporter() {}
 
-    @Listener
-    public void onPlayerDeath(DestructEntityEvent.Death event, @Getter("getTargetEntity") Player player) {
-        updateLastLocation(player);
-    }
-
-    /**
-     * Teleports an player to another player.
-     */
-    public static void teleport(Player player, Player target) {
-        updateLastLocation(player);
-        player.setLocation(target.getLocation());
-    }
-
     /**
      * Teleports the player to the given location.
      */
@@ -47,11 +34,17 @@ public class Teleporter {
     }
 
     /**
+     * Teleports an player to another player.
+     */
+    public static void teleport(Player player, Player target) {
+        teleport(player, target.getLocation());
+    }
+
+    /**
      * Transfers the player to the given world.
      */
     public static void teleport(Player player, World world) {
-        updateLastLocation(player);
-        player.transferToWorld(world);
+        teleport(player, world.getSpawnLocation());
     }
 
     /**
@@ -69,7 +62,7 @@ public class Teleporter {
     /**
      * Sets or replaces the last location for the given player with the current location.
      */
-    private static void updateLastLocation(Player player) {
+    public static void updateLastLocation(Player player) {
 
         if (lastLocations.containsKey(player)) {
             lastLocations.remove(player);
