@@ -45,13 +45,6 @@ public class Config {
     }
 
     /**
-     * Returns an integer from the given path. Accepts a fallback value.
-     */
-    public static int getInt(String path, int def) {
-        return root.getNode(resolvePath(path)).getInt(def);
-    }
-
-    /**
      * Returns a list of strings from the given path. Accepts a fallback value.
      */
     public static List<String> getList(String path, String[] def) {
