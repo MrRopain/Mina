@@ -1,7 +1,7 @@
 package me.ropain.mina.packages.essentials.commands;
 
 import me.ropain.mina.core.commands.AbstractCommand;
-import me.ropain.mina.core.config.PlayerData;
+import me.ropain.mina.core.playerdata.PlayerData;
 import me.ropain.mina.packages.essentials.teleport.Teleporter;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.Sponge;
@@ -52,31 +52,19 @@ public class CommandHome extends AbstractCommand {
     }
 
     private void setHome(Player player) {
-        Location<World> location = player.getLocation();
-
-        ConfigurationNode home = PlayerData.getData(player).getNode("home");
-        home.getNode("world").setValue(location.getExtent().getName());
-        home.getNode("x").setValue(location.getBlockX());
-        home.getNode("y").setValue(location.getBlockY());
-        home.getNode("z").setValue(location.getBlockZ());
-
+        PlayerData.of(player).getHome().setLocation(player.getLocation());
         displayResponse(player, ChatTypes.ACTION_BAR, "home_set");
     }
 
     private void teleportHome(Player player) {
-        ConfigurationNode home = PlayerData.getData(player).getNode("home");
-        String worldName = home.getNode("world").getString();
+        Location<World> homeLocation = PlayerData.of(player).getHome().getLocation();
 
-        if (worldName == null) {
+        if (homeLocation == null) {
             displayResponse(player, ChatTypes.ACTION_BAR, "home_not_set");
             return;
         }
 
-        int x = home.getNode("x").getInt();
-        int y = home.getNode("y").getInt();
-        int z = home.getNode("z").getInt();
-
-        Teleporter.teleport(player, new Location(Sponge.getServer().getWorld(worldName).get(), x, y, z));
+        Teleporter.teleport(player, homeLocation);
         displayResponse(player, ChatTypes.ACTION_BAR, "success");
     }
 }

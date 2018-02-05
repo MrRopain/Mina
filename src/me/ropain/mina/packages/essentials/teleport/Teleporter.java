@@ -1,6 +1,7 @@
 package me.ropain.mina.packages.essentials.teleport;
 
 
+import me.ropain.mina.core.playerdata.PlayerData;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
@@ -18,7 +19,6 @@ import java.util.HashMap;
 public class Teleporter {
 
     private static Teleporter instance;
-    private static HashMap<Player, Location<World>> lastLocations = new HashMap<>();
 
     /**
      * Private to prevent instantiation from outside.
@@ -29,7 +29,7 @@ public class Teleporter {
      * Teleports the player to the given location.
      */
     public static void teleport(Player player, Location<World> location) {
-        updateLastLocation(player);
+        PlayerData.of(player).updateLastLocation();
         player.setLocation(location);
     }
 
@@ -52,23 +52,12 @@ public class Teleporter {
      */
     public static void teleportBack(Player player) {
 
-        if (!lastLocations.containsKey(player)) {
+        Location<World> lastLocation = PlayerData.of(player).getLastLocation();
+        if (lastLocation == null) {
             return;
         }
 
-        teleport(player, lastLocations.get(player));
-    }
-
-    /**
-     * Sets or replaces the last location for the given player with the current location.
-     */
-    public static void updateLastLocation(Player player) {
-
-        if (lastLocations.containsKey(player)) {
-            lastLocations.remove(player);
-        }
-
-        lastLocations.put(player, player.getLocation());
+        teleport(player, lastLocation);
     }
 
     /**

@@ -2,16 +2,19 @@ package me.ropain.mina.core;
 
 import com.google.inject.Inject;
 import me.ropain.mina.core.config.Config;
-import me.ropain.mina.core.config.PlayerData;
 import me.ropain.mina.core.l10n.Localizable;
 import me.ropain.mina.core.packages.PackageManager;
+import me.ropain.mina.core.playerdata.PlayerData;
 import org.slf4j.Logger;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.MoveEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -24,7 +27,7 @@ public class Mina {
     private static final String LOCALE_DIR = "locales";
     private static final String LOCALE_DEFAULT = "english";
 
-    private static final String PATH_PLAYERDATA = "playerdata.mina";
+    private static final String PATH_PLAYERDATA = "playerdata";
 
     private static final String[] PACKAGES_DEFAULT = new String[] {
             "mina-essentials",
@@ -55,7 +58,25 @@ public class Mina {
     @Listener
     public void onStop(GameStoppedServerEvent event) {
         Config.save();
-        PlayerData.save();
+    }
+
+    @Listener
+    public void onPlayerJoin(ClientConnectionEvent.Join event) {
+        PlayerData.create(event.getTargetEntity());
+    }
+
+    @Listener
+    public void onPlayerQuit(ClientConnectionEvent.Disconnect event) {
+        PlayerData.destroy(event.getTargetEntity());
+    }
+
+    @Listener
+    public void onPlayerMove(MoveEntityEvent event, @Getter("getTargetEntity") Player player) {
+        PlayerData playerData = PlayerData.of(player);
+
+        if (playerData.isAway()) {
+            playerData.setAway(false);
+        }
     }
 
     private void init() {
@@ -64,12 +85,19 @@ public class Mina {
         Config.load(configPath);
         Localizable.setLocalesPath(getMinaPath(LOCALE_DIR));
         Localizable.setLocale(Config.getString("locale", LOCALE_DEFAULT));
-        PlayerData.load(getMinaPath(PATH_PLAYERDATA));
+        PlayerData.PersistentData.setRootPath(getMinaPath(PATH_PLAYERDATA));
         PackageManager.loadPackages(Config.getList("packages", PACKAGES_DEFAULT));
     }
 
     private Path getMinaPath(String subpath) {
-        return path.resolve(subpath);
+        Path path = this.path.resolve(subpath);
+
+        File file = path.toFile();
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return path;
     }
 
     public static Mina getInstance() {
